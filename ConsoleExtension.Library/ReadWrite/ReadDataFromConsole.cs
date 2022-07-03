@@ -4,7 +4,7 @@
     {
         public string ReadData()
         {
-            return Console.ReadLine();
+            return Console.ReadLine() ?? String.Empty;
         }
     }
 }
