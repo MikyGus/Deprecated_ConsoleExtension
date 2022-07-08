@@ -6,26 +6,16 @@ namespace ConsoleExtension.Library.Rules
     {
         public static IResult<int> VerifyOver(this IResult<int> valueToCompare, int compareAgainst)
         {
-            if (valueToCompare.Value > compareAgainst)
+            bool IsOverValue = valueToCompare.Value > compareAgainst;
+            if (IsOverValue == false)
             {
-                if (valueToCompare is IResultSuccess<int> resultSuccess)
-                {
-                    return resultSuccess;
-                }
-                return new ResultSuccess<int>(valueToCompare.Value);
+                valueToCompare.AddResultMessage($"Rule violation: {valueToCompare.Value} is not over {compareAgainst}.");
             }
-
-
-            string errorMessage = $"Rule violation: {valueToCompare.Value} is not over {compareAgainst}.";
-            if (valueToCompare is IResultFailed<int> failedResult)
+            if (valueToCompare is IResultSuccess<int> && IsOverValue)
             {
-                failedResult.AddResultMessage(errorMessage);
-                return failedResult;
+                return valueToCompare.ConvertToSuccess();
             }
-
-            IResult<int> newFailedResult = new ResultFailed<int>(valueToCompare.Value);
-            newFailedResult.AddResultMessage(errorMessage);
-            return newFailedResult;
+            return valueToCompare.ConvertToFail();
         }
     }
 }

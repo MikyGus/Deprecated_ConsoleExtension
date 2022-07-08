@@ -5,38 +5,40 @@ using Moq;
 
 namespace ConsoleExtension.Tests.System.Rules
 {
-    public class VerifyIntOverValueTests
+    public class VerifyIntBelowValueTests
     {
 
         public class WhenInputIsResultFailed
         {
+
             [Fact]
-            public void VerifyOverValue_ShouldConvertToFailedWithAddedMessage_WhenInputValue4IsNOTOver5()
+            public void VerifyBelowValue_ShouldConvertToFailedWithAddedMessage_WhenInputValue4IsNOTBelow3()
             {
                 // Arrange
-                Mock<IResultFailed<int>> mockResult = new(MockBehavior.Strict);
+                var mockResult = new Mock<IResultFailed<int>>(MockBehavior.Strict);
                 mockResult.Setup(x => x.Value).Returns(4);
                 mockResult.Setup(x => x.AddResultMessage(It.IsAny<string>()));
                 mockResult.Setup(x => x.ConvertToFail())
                     .Returns(new ResultFailed<int>(4));
                 // Act
-                _ = mockResult.Object.VerifyOver(5);
+                _ = mockResult.Object.VerifyBelow(3);
                 // Assert
                 mockResult.Verify(x => x.Value, Times.AtLeastOnce);
                 mockResult.Verify(x => x.AddResultMessage(It.IsAny<string>()), Times.Once);
                 mockResult.Verify(x => x.ConvertToFail(), Times.Once);
             }
+
             [Fact]
-            public void VerifyOverValue_ShouldConvertToFailedWithNOAddedMessage_WhenInputValue4ISOver3()
+            public void VerifyBelowValue_ShouldConvertToFailedWithNOAddedMessage_WhenInputValue4ISBelow5()
             {
                 // Arrange
-                Mock<IResultFailed<int>> mockResult = new(MockBehavior.Strict);
+                var mockResult = new Mock<IResultFailed<int>>(MockBehavior.Strict);
                 mockResult.Setup(x => x.Value).Returns(4);
                 mockResult.Setup(x => x.AddResultMessage(It.IsAny<string>()));
                 mockResult.Setup(x => x.ConvertToFail())
                     .Returns(new ResultFailed<int>(4));
                 // Act
-                _ = mockResult.Object.VerifyOver(3);
+                _ = mockResult.Object.VerifyBelow(5);
                 // Assert
                 mockResult.Verify(x => x.Value, Times.AtLeastOnce);
                 mockResult.Verify(x => x.AddResultMessage(It.IsAny<string>()), Times.Never);
@@ -44,14 +46,14 @@ namespace ConsoleExtension.Tests.System.Rules
             }
 
             [Fact]
-            public void VerifyOverValue_ShouldReturnFailed_WhenInputIsFailedRegardlessOfValues()
+            public void VerifyBelowValue_ShouldReturnFailed_WhenInputIsFailedRegardlessOfValues()
             {
                 // Arrange
                 IResult<int> result = new ResultFailed<int>(4);
                 // Act
-                IResult<int> sutBelow = result.VerifyOver(5);
-                IResult<int> sutEqual = result.VerifyOver(4);
-                IResult<int> sutOver = result.VerifyOver(3);
+                IResult<int> sutBelow = result.VerifyBelow(5);
+                IResult<int> sutEqual = result.VerifyBelow(4);
+                IResult<int> sutOver = result.VerifyBelow(3);
 
                 // Assert
                 sutBelow.Should().BeOfType<ResultFailed<int>>();
@@ -63,32 +65,33 @@ namespace ConsoleExtension.Tests.System.Rules
         public class WhenInputIsResultSuccess
         {
             [Fact]
-            public void VerifyOverValue_ShouldConvertToFailedWithAddedMessage_WhenInputValue4IsNOTOver5()
+            public void VerifyBelowValue_ShouldConvertToFailedWithAddedMessage_WhenInputValue4IsNOTBelow3()
             {
                 // Arrange
-                Mock<IResultSuccess<int>> mockResult = new(MockBehavior.Strict);
+                var mockResult = new Mock<IResultSuccess<int>>(MockBehavior.Strict);
                 mockResult.Setup(x => x.Value).Returns(4);
                 mockResult.Setup(x => x.AddResultMessage(It.IsAny<string>()));
                 mockResult.Setup(x => x.ConvertToFail())
                     .Returns(new ResultFailed<int>(4));
                 // Act
-                _ = mockResult.Object.VerifyOver(5);
+                _ = mockResult.Object.VerifyBelow(3);
                 // Assert
                 mockResult.Verify(x => x.Value, Times.AtLeastOnce);
                 mockResult.Verify(x => x.AddResultMessage(It.IsAny<string>()), Times.Once);
                 mockResult.Verify(x => x.ConvertToFail(), Times.Once);
             }
+
             [Fact]
-            public void VerifyOverValue_ShouldConvertToSuccessWithNOAddedMessage_WhenInputValue4ISOver3()
+            public void VerifyBelowValue_ShouldConvertToSuccessWithNOAddedMessage_WhenInputValue4ISBelow5()
             {
                 // Arrange
-                Mock<IResultSuccess<int>> mockResult = new(MockBehavior.Strict);
+                var mockResult = new Mock<IResultSuccess<int>>(MockBehavior.Strict);
                 mockResult.Setup(x => x.Value).Returns(4);
                 mockResult.Setup(x => x.AddResultMessage(It.IsAny<string>()));
                 mockResult.Setup(x => x.ConvertToSuccess())
                     .Returns(new ResultSuccess<int>(4));
                 // Act
-                _ = mockResult.Object.VerifyOver(3);
+                _ = mockResult.Object.VerifyBelow(5);
                 // Assert
                 mockResult.Verify(x => x.Value, Times.AtLeastOnce);
                 mockResult.Verify(x => x.AddResultMessage(It.IsAny<string>()), Times.Never);
@@ -96,20 +99,21 @@ namespace ConsoleExtension.Tests.System.Rules
             }
 
             [Fact]
-            public void VerifyOverValue_ShouldReturnSuccess_WhenInputIsSuccessANDValueISOver()
+            public void VerifyBelowValue_ShouldReturnSuccess_WhenInputIsSuccessANDValueISBelow()
             {
                 // Arrange
                 IResult<int> result = new ResultSuccess<int>(4);
                 // Act
-                IResult<int> sutBelow = result.VerifyOver(5);
-                IResult<int> sutEqual = result.VerifyOver(4);
-                IResult<int> sutOver = result.VerifyOver(3);
+                IResult<int> sutBelow = result.VerifyBelow(5);
+                IResult<int> sutEqual = result.VerifyBelow(4);
+                IResult<int> sutOver = result.VerifyBelow(3);
 
                 // Assert
-                sutBelow.Should().BeOfType<ResultFailed<int>>();
+                sutBelow.Should().BeOfType<ResultSuccess<int>>();
                 sutEqual.Should().BeOfType<ResultFailed<int>>();
-                sutOver.Should().BeOfType<ResultSuccess<int>>();
+                sutOver.Should().BeOfType<ResultFailed<int>>();
             }
         }
+
     }
 }
