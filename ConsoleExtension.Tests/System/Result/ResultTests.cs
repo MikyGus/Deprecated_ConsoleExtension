@@ -38,5 +38,53 @@ namespace ConsoleExtension.Tests.System.Result
             // Assert
             sut.ResultMessages.Should().HaveCount(2);
         }
+
+
+        [Fact]
+        public void ConvertToFail_ShouldReturnNewResultFailed_WhenInputResultSuccess()
+        {
+            // Arrange
+            IResult<int> sut = new ResultSuccess<int>(1);
+            // Act
+            IResult<int> newResult = sut.ConvertToFail();
+            // Assert
+            newResult.Should().BeAssignableTo<IResultFailed<int>>();
+        }
+
+
+        [Fact]
+        public void ConvertToFail_ShouldReturnSameResultFailed_WhenInputResultFailed()
+        {
+            // Arrange
+            IResult<int> sut = new ResultFailed<int>(1);
+            // Act
+            IResult<int> newResult = sut.ConvertToFail();
+            // Assert
+            newResult.Should().BeSameAs(sut);
+        }
+
+
+        [Fact]
+        public void ConvertToSuccess_ShouldReturnNewResultSuccess_WhenInputFailed()
+        {
+            // Arrange
+            IResult<int> sut = new ResultFailed<int>(1);
+            // Act
+            IResult<int> newResult = sut.ConvertToSuccess();
+            // Assert
+            newResult.Should().BeAssignableTo<IResultSuccess<int>>();
+        }
+
+
+        [Fact]
+        public void ConvertToSuccess_ShouldReturnSameResultSuccess_WhenInputResultSuccess()
+        {
+            // Arrange
+            IResult<int> sut = new ResultSuccess<int>(1);
+            // Act
+            IResult<int> newResult = sut.ConvertToSuccess();
+            // Assert
+            newResult.Should().BeSameAs(sut);
+        }
     }
 }

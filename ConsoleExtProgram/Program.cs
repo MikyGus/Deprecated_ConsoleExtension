@@ -30,7 +30,10 @@ else
 
 // ************ //
 // Verify rules //
-IResult<int> convertedIntegerVerified = inputString.ConvertToInt().VerifyOver(5);
+//IResult<int> convertedIntegerVerified = inputString.ConvertToInt().VerifyOver(5);
+//IResult<int> convertedIntegerVerified = inputString.ConvertToInt().VerifyBelow(5);
+IResult<int> convertedIntegerVerified = inputString.ConvertToInt().VerifyBelow(10).VerifyOver(3);
+
 if (convertedIntegerVerified is IResultSuccess<int> resultIntVerify)
 {
     write.WriteLine("Nice and pretty value... :)");
