@@ -9,6 +9,9 @@ IWriteData write = new WriteDataToConsole();
 IReadData read = new ReadDataFromConsole();
 string inputString = read.ReadData();
 
+// *************Convert********** //
+// string.ConvertToInt();         //
+// string.ConvertToDouble();      //
 
 // ****************************** //
 // Convert a string to an integer //
