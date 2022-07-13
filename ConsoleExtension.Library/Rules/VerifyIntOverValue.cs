@@ -7,15 +7,8 @@ namespace ConsoleExtension.Library.Rules
         public static IResult<int> VerifyOver(this IResult<int> valueToCompare, int compareAgainst)
         {
             bool IsOverValue = valueToCompare.Value > compareAgainst;
-            if (IsOverValue == false)
-            {
-                valueToCompare.AddResultMessage($"Rule violation: {valueToCompare.Value} is not over {compareAgainst}.");
-            }
-            if (valueToCompare is IResultSuccess<int> && IsOverValue)
-            {
-                return valueToCompare.ConvertToSuccess();
-            }
-            return valueToCompare.ConvertToFail();
+            string errorMessage = $"{valueToCompare.Value} is not over {compareAgainst}.";
+            return BaseVerify.VerifyValue(valueToCompare, IsOverValue, errorMessage);
         }
     }
 }
