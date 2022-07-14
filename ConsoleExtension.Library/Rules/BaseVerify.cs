@@ -4,7 +4,7 @@ namespace ConsoleExtension.Library.Rules
 {
     public class BaseVerify
     {
-        public static IResult<T> VerifyValue<T>(
+        public static IVerify<T> VerifyValue<T>(
             IResult<T> valueToCompare,
             bool isCompareValueSuccess,
             string messageOnFailure)
@@ -13,11 +13,12 @@ namespace ConsoleExtension.Library.Rules
             {
                 valueToCompare.AddResultMessage($"Rule violation: {messageOnFailure}");
             }
+            VerifyFactory<T> verifyFactory = new VerifyFactory<T>();
             if (valueToCompare is IResultSuccess<int> && isCompareValueSuccess)
             {
-                return valueToCompare.ConvertToSuccess();
+                return verifyFactory.ConvertTo(valueToCompare, VerifyFactory<T>.ResultType.VerifySuccess);
             }
-            return valueToCompare.ConvertToFail();
+            return verifyFactory.ConvertTo(valueToCompare, VerifyFactory<T>.ResultType.VerifyFailed);
         }
     }
 }

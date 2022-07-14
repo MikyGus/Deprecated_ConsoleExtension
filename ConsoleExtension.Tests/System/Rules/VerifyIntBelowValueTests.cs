@@ -21,7 +21,7 @@ namespace ConsoleExtension.Tests.System.Rules
                 mockResult.Setup(x => x.ConvertToFail())
                     .Returns(new ResultFailed<int>(4));
                 // Act
-                _ = mockResult.Object.VerifyBelow(3);
+                _ = mockResult.Object.ValueIsBelow(3);
                 // Assert
                 mockResult.Verify(x => x.Value, Times.AtLeastOnce);
                 mockResult.Verify(x => x.AddResultMessage(It.IsAny<string>()), Times.Once);
@@ -38,7 +38,7 @@ namespace ConsoleExtension.Tests.System.Rules
                 mockResult.Setup(x => x.ConvertToFail())
                     .Returns(new ResultFailed<int>(4));
                 // Act
-                _ = mockResult.Object.VerifyBelow(5);
+                _ = mockResult.Object.ValueIsBelow(5);
                 // Assert
                 mockResult.Verify(x => x.Value, Times.AtLeastOnce);
                 mockResult.Verify(x => x.AddResultMessage(It.IsAny<string>()), Times.Never);
@@ -51,9 +51,9 @@ namespace ConsoleExtension.Tests.System.Rules
                 // Arrange
                 IResult<int> result = new ResultFailed<int>(4);
                 // Act
-                IResult<int> sutBelow = result.VerifyBelow(5);
-                IResult<int> sutEqual = result.VerifyBelow(4);
-                IResult<int> sutOver = result.VerifyBelow(3);
+                IResult<int> sutBelow = result.ValueIsBelow(5);
+                IResult<int> sutEqual = result.ValueIsBelow(4);
+                IResult<int> sutOver = result.ValueIsBelow(3);
 
                 // Assert
                 sutBelow.Should().BeOfType<ResultFailed<int>>();
@@ -74,7 +74,7 @@ namespace ConsoleExtension.Tests.System.Rules
                 mockResult.Setup(x => x.ConvertToFail())
                     .Returns(new ResultFailed<int>(4));
                 // Act
-                _ = mockResult.Object.VerifyBelow(3);
+                _ = mockResult.Object.ValueIsBelow(3);
                 // Assert
                 mockResult.Verify(x => x.Value, Times.AtLeastOnce);
                 mockResult.Verify(x => x.AddResultMessage(It.IsAny<string>()), Times.Once);
@@ -91,7 +91,7 @@ namespace ConsoleExtension.Tests.System.Rules
                 mockResult.Setup(x => x.ConvertToSuccess())
                     .Returns(new ResultSuccess<int>(4));
                 // Act
-                _ = mockResult.Object.VerifyBelow(5);
+                _ = mockResult.Object.ValueIsBelow(5);
                 // Assert
                 mockResult.Verify(x => x.Value, Times.AtLeastOnce);
                 mockResult.Verify(x => x.AddResultMessage(It.IsAny<string>()), Times.Never);
@@ -104,9 +104,9 @@ namespace ConsoleExtension.Tests.System.Rules
                 // Arrange
                 IResult<int> result = new ResultSuccess<int>(4);
                 // Act
-                IResult<int> sutBelow = result.VerifyBelow(5);
-                IResult<int> sutEqual = result.VerifyBelow(4);
-                IResult<int> sutOver = result.VerifyBelow(3);
+                IResult<int> sutBelow = result.ValueIsBelow(5);
+                IResult<int> sutEqual = result.ValueIsBelow(4);
+                IResult<int> sutOver = result.ValueIsBelow(3);
 
                 // Assert
                 sutBelow.Should().BeOfType<ResultSuccess<int>>();
