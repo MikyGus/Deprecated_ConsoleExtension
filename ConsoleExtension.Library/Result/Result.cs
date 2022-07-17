@@ -1,11 +1,14 @@
 ﻿namespace ConsoleExtension.Library.Result
 {
-    public abstract class Result<T> : IResult<T>
+    public class Result<T> : IResult<T>
     {
         private readonly List<string> _resultMessages = new();
-        public bool IsSuccessful { get; protected set; } = false;
+        private readonly T _defaultValue;
+        private bool _isSuccessful;
 
-        public abstract T Value { get; }
+        public bool IsSuccessful { get => _isSuccessful; }
+
+        public T Value { get; set; }
 
         public IReadOnlyList<string> ResultMessages
         {
@@ -13,37 +16,47 @@
             init { _resultMessages = (List<string>)value; }
         }
 
+        //public Result(T defaultValue) : this(defaultValue,defaultValue, true)
+        //{
+        //}
+        //public Result(T defaultValue, T value) : this(defaultValue, value, true)
+        //{
+        //}
+
+        public Result(T defaultValue, T value, bool isSuccessful)
+        {
+            _defaultValue = defaultValue;
+            Value = value;
+            _isSuccessful = isSuccessful;
+        }
+
         public void AddResultMessage(string message)
         {
             _resultMessages.Add(message);
         }
 
-        public IResult<T> ConvertToFail()
-        {
-            if (GetType() != typeof(ResultFailed<T>))
-            {
-                IResultFailed<T> resultFailed = new ResultFailed<T>(Value)
-                {
-                    ResultMessages = this.ResultMessages
-                };
-                return resultFailed;
-            }
 
-            return this;
+
+        public void ConvertToFail()
+        {
+            _isSuccessful = false;
         }
 
-        public IResult<T> ConvertToSuccess()
+        public void ConvertToSuccess()
         {
-            if (GetType() != typeof(ResultSuccess<T>))
-            {
-                IResultSuccess<T> resultSuccess = new ResultSuccess<T>(this.Value)
-                {
-                    ResultMessages = this.ResultMessages
-                };
-                return resultSuccess;
-            }
+            _isSuccessful = true;
+        }
 
-            return this;
+        public void ConvertTo(bool isSuccessful)
+        {
+            if (isSuccessful)
+            {
+                ConvertToSuccess();
+            }
+            else
+            {
+                ConvertToFail();
+            }
         }
     }
 }

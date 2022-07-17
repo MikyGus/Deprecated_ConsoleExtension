@@ -6,7 +6,8 @@
         T Value { get; }
         IReadOnlyList<string> ResultMessages { get; init; }
         void AddResultMessage(string message);
-        IResult<T> ConvertToFail();
-        IResult<T> ConvertToSuccess();
+        void ConvertToFail();
+        void ConvertToSuccess();
+        void ConvertTo(bool isSuccessfull);
     }
 }
