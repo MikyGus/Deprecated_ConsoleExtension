@@ -1,6 +1,7 @@
 ﻿using ConsoleExtension.Library.Converters;
 using ConsoleExtension.Library.Result;
 using ConsoleExtension.Library.ReadWrite;
+using ConsoleExtension.Library.Rules;
 
 Console.WriteLine("ConsoleExtention demo!");
 
@@ -14,18 +15,19 @@ string inputString = read.ReadData();
 
 // ****************************** //
 // Convert a string to an integer //
-//IResult<int> convertedInteger = inputString.ConvertToInt();
-IResult<double> convertedInteger = inputString.ConvertToDouble();
+IResult<int> convertedInteger = inputString.ConvertToInt();
+//IResult<double> convertedInteger = inputString.ConvertToDouble();
+var verifyInteger = convertedInteger.Verify();
 
-if (convertedInteger.IsSuccessful == true)
+if (verifyInteger.IsSuccessful == true)
 {
     write.WriteLine("Nice and pretty value... :)");
-    write.WriteLine(convertedInteger.Value.ToString());
+    write.WriteLine(verifyInteger.Value.ToString());
 }
 else
 {
-    write.WriteLine($"BAD result. Entered: {inputString} Defaulted to: {convertedInteger.Value}");
-    var errors = convertedInteger.ResultMessages;
+    write.WriteLine($"BAD result. Entered: {inputString} Defaulted to: {verifyInteger.Value}");
+    var errors = verifyInteger.ResultMessages;
     foreach (var error in errors)
     {
         write.WriteLine(error);

@@ -9,6 +9,7 @@
         public bool IsSuccessful { get => _isSuccessful; }
 
         public T Value { get; set; }
+        public T DefaultValue => _defaultValue;
 
         public IReadOnlyList<string> ResultMessages
         {

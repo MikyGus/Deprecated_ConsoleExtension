@@ -4,6 +4,7 @@
     {
         bool IsSuccessful { get; }
         T Value { get; }
+        T DefaultValue { get; }
         IReadOnlyList<string> ResultMessages { get; init; }
         void AddResultMessage(string message);
         void ConvertToFail();

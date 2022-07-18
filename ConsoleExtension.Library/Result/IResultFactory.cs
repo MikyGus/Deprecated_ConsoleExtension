@@ -1,8 +1,11 @@
-﻿namespace ConsoleExtension.Library.Result
+﻿using ConsoleExtension.Library.Rules;
+
+namespace ConsoleExtension.Library.Result
 {
-    internal interface IResultFactory<T>
+    public interface IResultFactory<T>
     {
-        //IResult<T> Create(T defaultValue);
         IResult<T> Create(T defaultValue, T value, bool isSuccess);
+        public IVerifyResult<T> ConvertToVerify(IResult<T> currentResult);
+
     }
 }

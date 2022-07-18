@@ -1,8 +1,8 @@
-﻿using ConsoleExtension.Library.Exceptions;
+﻿using ConsoleExtension.Library.Rules;
 
 namespace ConsoleExtension.Library.Result
 {
-    internal class ResultFactory<T> : IResultFactory<T>
+    public class ResultFactory<T> : IResultFactory<T>
     {
         //public IResult<T> Create(T defaultValue)
         //{
@@ -22,6 +22,16 @@ namespace ConsoleExtension.Library.Result
             }
             IResult<T> newResult = new Result<T>(defaultValue, value, isSuccessful);
             return newResult;
+        }
+
+        public IVerifyResult<T> ConvertToVerify(IResult<T> currentResult)
+        {
+            IVerifyResult<T> verifyResult = new VerifyResult<T>(
+                currentResult.DefaultValue, currentResult.Value, currentResult.IsSuccessful)
+            {
+                ResultMessages = currentResult.ResultMessages
+            };
+            return verifyResult;
         }
 
 
