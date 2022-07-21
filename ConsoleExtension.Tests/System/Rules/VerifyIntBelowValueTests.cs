@@ -3,7 +3,59 @@
 //using FluentAssertions;
 //using Moq;
 
-//namespace ConsoleExtension.Tests.System.Rules
+using ConsoleExtension.Library.Result;
+using ConsoleExtension.Library.Rules;
+using FluentAssertions;
+using Moq;
+using Xunit;
+namespace ConsoleExtension.Tests.System.Rules;
+
+public class VerifyIntBelowValueTests
+{
+
+    [Fact]
+    public void VerifyBelowValue_ShouldVerifySuccess_WhenInputResultSuccessAndValue5IsUnder10()
+    {
+        // Arrange
+        int DefaultValue = 0;
+        int Value = 5;
+        bool IsSuccessful = true;
+        IVerifyResult<int> verifySuccess = new VerifyResult<int>(DefaultValue, Value, IsSuccessful);
+        // Act
+        var result = verifySuccess.IsUnderValue(10);
+        // Assert
+        result.IsSuccessful.Should().BeTrue();
+    }
+
+    [Fact]
+    public void VerifyBelowValue_ShouldVerifyFailed_WhenInputResultSuccessAndValue100IsUnder10()
+    {
+        // Arrange
+        int DefaultValue = 0;
+        int Value = 100;
+        bool IsSuccessful = true; 
+        IVerifyResult<int> verifySuccess = new VerifyResult<int>(DefaultValue,Value,IsSuccessful);
+        // Act
+        var result = verifySuccess.IsUnderValue(10);
+        // Assert
+        result.IsSuccessful.Should().BeFalse();
+    }
+
+    [Fact]
+    public void VerifyBelowValue_ShouldVerifyFailed_WhenInputResultFailedAndValue5IsUnder10()
+    {
+        // Arrange
+        int DefaultValue = 0;
+        int Value = 5;
+        bool IsSuccessful = false;
+        IVerifyResult<int> verifyFailed = new VerifyResult<int>(DefaultValue, Value, IsSuccessful);
+        // Act
+        var result = verifyFailed.IsUnderValue(10);
+        // Assert
+        result.IsSuccessful.Should().BeFalse();
+    }
+}
+
 //{
 //    public class VerifyIntBelowValueTests
 //    {
