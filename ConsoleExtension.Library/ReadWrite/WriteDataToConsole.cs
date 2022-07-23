@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ConsoleExtension.Library.ReadWrite;
 
-namespace ConsoleExtension.Library.ReadWrite
+public class WriteDataToConsole : IWriteData
 {
-    public class WriteDataToConsole : IWriteData
+    public void Write(string data)
     {
-        public void Write(string data)
-        {
-            Console.Write(data);
-        }
+        Console.Write(data);
+    }
 
-        public void WriteLine(string data)
-        {
-            Console.WriteLine(data);
-        }
+    public void WriteLine(string data)
+    {
+        Console.WriteLine(data);
     }
 }

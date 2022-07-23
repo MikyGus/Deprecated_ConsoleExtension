@@ -58,40 +58,50 @@ Extra functionality for the console
 
 ## Verify data
 ### Chain methods
-All Verify methods can be chained together. 
+Several Verify() methods can be chained together. 
 **Note**: Evaluation continues even if first Verifymethod fails. All error-messages can be found in *ResultMessages*.
 
 ### Verify returns
-**Returns ResultFailed():IResultFailed** if evaluation fails or if input is IResultFailed.
-**Returns ResultSuccess():IResultSuccess** if evaluation results to valid and input is IResultSuccess. 
+Property **IsSuccessful** is true if _all_ Verify() evaluates successfully. If one of the chained Verify() fails the end result i allways false.
 
 
-### Int
-**VerifyBelow**
-Verifies that the input value is _below_ specified value.
+### Verify()
+**Basic**
 ```csharp
-int number = ResultSuccess(3);
-IResult<int> result = number.VerifyBelow(10);
+    IResult<int> convertedValue = "5".ConvertToInt();
+    IResult<int> verifiedValue = convertedValue.Verify(x => x < 10);
 ```
-**VerifyOver**
-Verifies that the input value is _over_ specified value.
+**Chain**
 ```csharp
-int number = ResultSuccess(10);
-IResult<int> result = number.VerifyOver(5);
+    IResult<int> convertedValue = "5".ConvertToInt();
+    IResult<int> verifiedValue = convertedValue.Verify(x => x < 10).Verify(x => x > 2);
+```
+**Message on fail**
+```csharp
+    IResult<int> convertedValue = "5".ConvertToInt();
+    IResult<int> verifiedValue = convertedValue
+        .Verify(x => x < 10, "Value is not under 10")
+        .Verify(x => x > 2, "Value is not over 2");
 ```
 
 ### Examples
 ```csharp
-    IResult<int> convertedIntegerVerified = inputString.ConvertToInt().VerifyBelow(10).VerifyOver(3);
+    IResult<int> convertedIntegerVerified = inputString
+        .ConvertToInt()
+        .Verify(x => x > 6, "Value is not above 6")
+        .Verify(x => x < 10, "value is not under 10");
+    IResult<int> test0 = inputString.ConvertToInt().Verify(x => x > 6).Verify(x => x < 10);
+    IResult<int> test1 = inputString.ConvertToInt().Verify(x => x > 6 && x < 10);
+    IResult<int> test2 = inputString.ConvertToInt().Verify(x => x > 6 && x < 10, "Failed to pass this test... :(");
 
-    if (convertedIntegerVerified is IResultSuccess<int> resultIntVerify)
+    if (convertedIntegerVerified.IsSuccessful == true)
     {
         write.WriteLine("Nice and pretty value... :)");
-        write.WriteLine(resultIntVerify.Value.ToString());
+        write.WriteLine(convertedIntegerVerified.Value.ToString());
     }
     else
     {
-        write.WriteLine($"BAD result. Entered: {inputString} Defaulted to: {convertedInteger.Value}");
+        write.WriteLine($"BAD result. Entered: {inputString} Defaulted to: {convertedIntegerVerified.Value}");
         var errors = convertedIntegerVerified.ResultMessages;
         foreach (var error in errors)
         {
@@ -99,5 +109,3 @@ IResult<int> result = number.VerifyOver(5);
         }
     }
 ```
-
-## IResult, IResultSuccess, IResultFailed

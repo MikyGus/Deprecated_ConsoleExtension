@@ -1,12 +1,12 @@
-﻿namespace ConsoleExtension.Library.Result
+﻿namespace ConsoleExtension.Library.Result;
+
+public interface IResult<T>
 {
-    public interface IResult<T>
-    {
-        bool IsSuccessful { get; }
-        T Value { get; }
-        IReadOnlyList<string> ResultMessages { get; init; }
-        void AddResultMessage(string message);
-        IResult<T> ConvertToFail();
-        IResult<T> ConvertToSuccess();
-    }
+    bool IsSuccessful { get; }
+    T Value { get; }
+    T DefaultValue { get; }
+    IReadOnlyList<string> ResultMessages { get; init; }
+    void AddResultMessage(string message);
+    void SetToFail();
+    void SetToSuccess();
 }
