@@ -1,7 +1,7 @@
 ﻿using ConsoleExtension.Library.Converters;
 using ConsoleExtension.Library.Result;
 using ConsoleExtension.Library.ReadWrite;
-using ConsoleExtension.Library.Rules;
+using ConsoleExtension.Library.VerifyValue;
 
 Console.WriteLine("ConsoleExtention demo!");
 
@@ -17,22 +17,26 @@ string inputString = read.ReadData();
 // Convert a string to an integer //
 IResult<int> convertedInteger = inputString.ConvertToInt();
 //IResult<double> convertedInteger = inputString.ConvertToDouble();
-var verifyInteger = convertedInteger.Verify();
+//var verifyInteger = convertedInteger.Verify();
 
-if (verifyInteger.IsSuccessful == true)
+if (convertedInteger.IsSuccessful == true)
 {
     write.WriteLine("Nice and pretty value... :)");
-    write.WriteLine(verifyInteger.Value.ToString());
+    write.WriteLine(convertedInteger.Value.ToString());
 }
 else
 {
-    write.WriteLine($"BAD result. Entered: {inputString} Defaulted to: {verifyInteger.Value}");
-    var errors = verifyInteger.ResultMessages;
+    write.WriteLine($"BAD result. Entered: {inputString} Defaulted to: {convertedInteger.Value}");
+    var errors = convertedInteger.ResultMessages;
     foreach (var error in errors)
     {
         write.WriteLine(error);
     }
 }
+
+var test = inputString.ConvertToInt().Verify(x => x > 6).Verify(x => x < 10);
+var test2 = inputString.ConvertToInt().Verify(x => x > 6 && x < 10);
+var test3 = inputString.ConvertToInt().Verify(x => x > 6 && x < 10, "Failed to pass this test... :(");
 
 // ************ //
 // Verify rules //

@@ -1,8 +1,7 @@
-﻿namespace ConsoleExtension.Library.ReadWrite
+﻿namespace ConsoleExtension.Library.ReadWrite;
+
+public interface IWriteData
 {
-    public interface IWriteData
-    {
-        void Write(string data);
-        void WriteLine(string data);
-    }
+    void Write(string data);
+    void WriteLine(string data);
 }

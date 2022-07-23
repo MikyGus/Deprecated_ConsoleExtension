@@ -1,10 +1,9 @@
-﻿namespace ConsoleExtension.Library.ReadWrite
+﻿namespace ConsoleExtension.Library.ReadWrite;
+
+public class ReadDataFromConsole : IReadData
 {
-    public class ReadDataFromConsole : IReadData
+    public string ReadData()
     {
-        public string ReadData()
-        {
-            return Console.ReadLine() ?? String.Empty;
-        }
+        return Console.ReadLine() ?? String.Empty;
     }
 }

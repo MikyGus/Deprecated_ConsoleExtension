@@ -1,7 +1,6 @@
-﻿namespace ConsoleExtension.Library.ReadWrite
+﻿namespace ConsoleExtension.Library.ReadWrite;
+
+public interface IReadData
 {
-    public interface IReadData
-    {
-        string ReadData();
-    }
+    string ReadData();
 }
