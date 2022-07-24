@@ -94,4 +94,31 @@ public class VerifyResultValueTests
         // Assert
         resultValue.ResultMessages.Should().HaveCount(0);
     }
+
+
+    [Fact]
+    public void Verify_ShouldReturnResultWithTwoMessages_WhenEvaluateIsFalseAndInputResultWithOneMessage()
+    {
+        // Arrange
+        var resultClass = new ResultFactory<int>().Create(0, 5, true);
+        var result1 = resultClass.Verify(x => false, "We have error 1");
+        // Act
+        var resultValue = result1.Verify(x => false, "We have error 2");
+        // Assert
+        resultValue.ResultMessages.Should().HaveCount(2);
+    }
+
+
+    [Fact]
+    public void Verify_ShouldReturnResultNoNewMessages_WhenEvaluateIsTrueAndInputResultIsFalse()
+    {
+        // Arrange
+        var resultClass = new ResultFactory<int>().Create(0, 5, false);
+        // Act
+        var resultValue = resultClass.Verify(x => true, "We have error");
+        // Assert
+        resultValue.ResultMessages.Should().HaveCount(0);
+        resultValue.IsSuccessful.Should().BeFalse();
+    }
+
 }
