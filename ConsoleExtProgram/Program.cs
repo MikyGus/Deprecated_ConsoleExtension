@@ -37,8 +37,10 @@ else
 
 // ************ //
 // Verify rules //
+int[] myCollection = { 1, 2, 3, 4 };
 IResult<int> convertedIntegerVerified = inputString
     .ConvertToInt()
+    .Verify(x => Array.Exists(myCollection,z => z == x),"Not Contained in collection")
     .Verify(x => x > 6, "Value is not above 6")
     .Verify(x => x < 10, "value is not under 10");
 IResult<int> test0 = inputString.ConvertToInt().Verify(x => x > 6).Verify(x => x < 10);

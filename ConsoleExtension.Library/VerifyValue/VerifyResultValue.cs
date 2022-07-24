@@ -6,20 +6,15 @@ namespace ConsoleExtension.Library.VerifyValue
     {
         public static IResult<T> Verify<T>(this IResult<T> valueToVerify, Func<T,bool> evaluate, string messageOnFail = "")
         {
-            if (valueToVerify.IsSuccessful == false)
-            {
-                return valueToVerify;
-            }
-
             bool havePassedTest = evaluate.Invoke(valueToVerify.Value);
 
-            if (havePassedTest == true)
+            if (havePassedTest == true && valueToVerify.IsSuccessful == true)
             {
                 valueToVerify.SetToSuccess();
                 return valueToVerify;
             }
 
-            if (string.IsNullOrWhiteSpace(messageOnFail) == false)
+            if (havePassedTest == false && string.IsNullOrWhiteSpace(messageOnFail) == false)
             {
                 valueToVerify.AddResultMessage(messageOnFail);
             }
