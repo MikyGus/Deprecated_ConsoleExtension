@@ -47,6 +47,9 @@ IResult<int> test0 = inputString.ConvertToInt().Verify(x => x > 6).Verify(x => x
 IResult<int> test1 = inputString.ConvertToInt().Verify(x => x > 6 && x < 10);
 IResult<int> test2 = inputString.ConvertToInt().Verify(x => x > 6 && x < 10, "Failed to pass this test... :(");
 
+
+IResult<int> test = 42.Verify(x => x > 6, "Hello, you failed.");
+
 if (convertedIntegerVerified.IsSuccessful == true)
 {
     write.WriteLine("Nice and pretty value... :)");

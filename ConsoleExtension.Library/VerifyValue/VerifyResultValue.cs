@@ -22,5 +22,11 @@ namespace ConsoleExtension.Library.VerifyValue
             return valueToVerify;
 
         }
+
+        public static IResult<T> Verify<T>(this T valueToVerify, Func<T, bool> evaluate, string messageOnFail = "")
+        {
+            IResult<T> result = new ResultFactory<T>().Create(valueToVerify,valueToVerify,true);
+            return Verify(result,evaluate,messageOnFail);
+        }
     }
 }
