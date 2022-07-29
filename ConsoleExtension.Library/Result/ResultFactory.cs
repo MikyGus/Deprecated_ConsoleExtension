@@ -1,14 +1,14 @@
 ﻿namespace ConsoleExtension.Library.Result;
 
-public class ResultFactory<T> : IResultFactory<T>
+internal class ResultFactory<T>
 {
-    public IResult<T> Create(T defaultValue, T value, bool isSuccessful)
+    internal static IResult<T> Create(T value, T defaultValue, bool isSuccessful)
     {
         if (isSuccessful == false)
         {
             value = defaultValue;
         }
-        IResult<T> newResult = new Result<T>(defaultValue, value, isSuccessful);
+        IResult<T> newResult = new Result<T>(value, defaultValue, isSuccessful);
         return newResult;
     }
 }

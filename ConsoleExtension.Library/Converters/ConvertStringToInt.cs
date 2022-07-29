@@ -8,7 +8,7 @@ public static class ConvertStringToInt
     {
         bool isSuccessful = int.TryParse(inputString, out int value);
 
-        IResult<int> result = new ResultFactory<int>().Create(defaultValue,value,isSuccessful);
+        IResult<int> result = ResultFactory<int>.Create(value, defaultValue, isSuccessful);
 
         if (isSuccessful == false)
         {

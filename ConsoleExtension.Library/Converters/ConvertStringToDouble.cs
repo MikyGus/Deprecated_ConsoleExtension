@@ -11,7 +11,7 @@ public static class ConvertStringToDouble
 
         bool isSuccessful = double.TryParse(inputString, NumberStyles.Any, cultureInfo, out double value);
 
-        IResult<double> result = new ResultFactory<double>().Create(defaultValue, value, isSuccessful);
+        IResult<double> result = ResultFactory<double>.Create(value, defaultValue, isSuccessful);
         if (isSuccessful == false)
         {
             result.AddResultMessage($"Could not convert the string [{inputString}] to a double. It's not in a double-format.");
