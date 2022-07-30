@@ -17,7 +17,7 @@ public class Result<T> : IResult<T>
         init { _resultMessages = (List<string>)value; }
     }
 
-    public Result(T defaultValue, T value, bool isSuccessful)
+    public Result(T value, T defaultValue, bool isSuccessful)
     {
         _defaultValue = defaultValue;
         Value = value;
