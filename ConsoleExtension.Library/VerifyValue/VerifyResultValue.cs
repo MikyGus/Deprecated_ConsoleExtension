@@ -4,7 +4,7 @@ namespace ConsoleExtension.Library.VerifyValue
 {
     public static class VerifyResultValue
     {
-        public static IResult<T> Verify<T>(this IResult<T> valueToVerify, Func<T,bool> evaluate, string messageOnFail = "")
+        internal static IResult<T> VerifyValue<T>(IResult<T> valueToVerify, Func<T, bool> evaluate, string messageOnFail = "")
         {
             bool havePassedTest = evaluate.Invoke(valueToVerify.Value);
 
@@ -20,13 +20,6 @@ namespace ConsoleExtension.Library.VerifyValue
             }
             valueToVerify.SetToFail();
             return valueToVerify;
-
-        }
-
-        public static IResult<T> Verify<T>(this T valueToVerify, Func<T, bool> evaluate, string messageOnFail = "")
-        {
-            IResult<T> result = new ResultFactory<T>().Create(valueToVerify,valueToVerify,true);
-            return Verify(result,evaluate,messageOnFail);
         }
     }
 }

@@ -66,41 +66,43 @@ Property **IsSuccessful** is true if _all_ Verify() evaluates successfully. If o
 
 
 ### Verify()
-**Basic**
+**Verify IResult<T>**
 ```csharp
-    IResult<int> convertedValue = "5".ConvertToInt();
-    IResult<int> verifiedValue = convertedValue.Verify(x => x < 10);
-```
-**Chain**
-```csharp
-    IResult<int> convertedValue = "5".ConvertToInt();
-    IResult<int> verifiedValue = convertedValue.Verify(x => x < 10).Verify(x => x > 2);
-```
-**Message on fail**
-```csharp
-    IResult<int> convertedValue = "5".ConvertToInt();
-    IResult<int> verifiedValue = convertedValue
+    IResult<int> convertedValue = "5".ConvertToInt(); // We convert our input to integer
+
+    IResult<int> SimpleVerifiedInteger = convertedValue.Verify(x => x < 10);
+    IResult<int> ChainedVerified = convertedValue.Verify(x => x < 10).Verify(x => x > 2);
+    IResult<int> VerifyWithMessageOnFail = convertedValue
         .Verify(x => x < 10, "Value is not under 10")
         .Verify(x => x > 2, "Value is not over 2");
+```
+**Verify literals**
+Above examples also applies to literals, ie chaining, messageOnFail etc.
+```csharp
+    IResult<int> VerifiedInteger = 42.Verify(x => x < 10);
+    IResult<double> VerifiedDouble = 42.5d.Verify(x => x < 10);
 ```
 
 ### Examples
 ```csharp
+    // Maybe input from the user
+    string = "42"; 
+
+    // We convert the input to integer and verifies the value is between 6 and 10.
     IResult<int> convertedIntegerVerified = inputString
         .ConvertToInt()
         .Verify(x => x > 6, "Value is not above 6")
         .Verify(x => x < 10, "value is not under 10");
-    IResult<int> test0 = inputString.ConvertToInt().Verify(x => x > 6).Verify(x => x < 10);
-    IResult<int> test1 = inputString.ConvertToInt().Verify(x => x > 6 && x < 10);
-    IResult<int> test2 = inputString.ConvertToInt().Verify(x => x > 6 && x < 10, "Failed to pass this test... :(");
 
     if (convertedIntegerVerified.IsSuccessful == true)
     {
+        // If we have a good value from the user we display it...
         write.WriteLine("Nice and pretty value... :)");
         write.WriteLine(convertedIntegerVerified.Value.ToString());
     }
     else
     {
+        // ... but if the value is bad we display all the reasons why it failed.
         write.WriteLine($"BAD result. Entered: {inputString} Defaulted to: {convertedIntegerVerified.Value}");
         var errors = convertedIntegerVerified.ResultMessages;
         foreach (var error in errors)
