@@ -19,6 +19,7 @@ static (IWriteData, IReadData) Init()
 }
 static string GetValueFromUser(IReadData read)
 {
+    Console.Write("Please enter your value: ");
     string inputString = read.ReadData();
     return inputString;
 }
@@ -28,30 +29,19 @@ static void ConvertValues(string inputString, IWriteData write)
     // string.ConvertToInt();         //
     // string.ConvertToDouble();      //
     // ****************************** //
-
+    Console.WriteLine("******************\nConvert: START\n******************");
     IResult<int> convertedValue = inputString.ConvertToInt();
-    //IResult<double> convertedValue = inputString.ConvertToDouble();
+    //IResult<double> convertedValue = await inputString.ConvertToDouble();
 
-    if (convertedValue.IsSuccessful == true)
-    {
-        write.WriteLine("Nice and pretty value... :)");
-        write.WriteLine(convertedValue.Value.ToString());
-    }
-    else
-    {
-        write.WriteLine($"BAD result. Entered: {inputString} Defaulted to: {convertedValue.Value}");
-        var errors = convertedValue.ResultMessages;
-        foreach (var error in errors)
-        {
-            write.WriteLine(error);
-        }
-    }
+    PrintResult<int>(convertedValue, inputString, write);
+    Console.WriteLine("\nConvert: END\n******************\n\n");
 }
 static void VerifyValue(string inputString, IWriteData write)
 {
+    Console.WriteLine("******************\nConvert and verify: START\n******************");
     // ************ //
     // Verify rules //
-    int[] myCollection = { 1, 2, 3, 4 };
+    int[] myCollection = { 1, 2, 3, 4, 7 };
     IResult<int> convertedIntegerVerified = inputString
         .ConvertToInt()
         .Verify(x => Array.Exists(myCollection, z => z == x), "Not Contained in collection")
@@ -64,18 +54,27 @@ static void VerifyValue(string inputString, IWriteData write)
     IResult<int> VerifyAnInt = 42.Verify(x => x > 6, "Value is not above 6");
     IResult<double> VerifyADouble = 42.0d.Verify(x => x > 6, "Value is not above 6");
 
-    if (convertedIntegerVerified.IsSuccessful == true)
+    PrintResult<int>(convertedIntegerVerified, inputString, write);
+    Console.WriteLine("\nConvert and verify: END\n******************\n\n");
+}
+
+
+static void PrintResult<T>(IResult<T> result, string userInput, IWriteData write)
+{
+    if (result.IsSuccessful == true)
     {
-        write.WriteLine("Nice and pretty value... :)");
-        write.WriteLine(convertedIntegerVerified.Value.ToString());
+        write.WriteLine($"The entered value [{result.Value}] is a nice and pretty value... :)");
     }
     else
     {
-        write.WriteLine($"BAD result. Entered: {inputString} Defaulted to: {convertedIntegerVerified.Value}");
-        var errors = convertedIntegerVerified.ResultMessages;
+        write.WriteLine($"BAD result.\n\tEntered: {userInput}\n\tValue in result is: {result.Value}");
+        Console.WriteLine("Errors:");
+        IReadOnlyList<string> errors = result.ResultMessages;
+        string prefix = "\t";
+        string suffix = String.Empty;
         foreach (var error in errors)
         {
-            write.WriteLine(error);
+            write.WriteLine($"{prefix}{error}{suffix}");
         }
     }
 }
