@@ -2,11 +2,14 @@
 using ConsoleExtension.Library.Result;
 using ConsoleExtension.Library.ReadWrite;
 using ConsoleExtension.Library.VerifyValue;
+using ConsoleExtension.Library.DataModifiers;
 
 (IWriteData consoleWrite, IReadData consoleRead) = Init();
-string inputValue = GetValueFromUser(consoleRead);
-ConvertValues(inputValue, consoleWrite);
-VerifyValue(inputValue, consoleWrite);
+
+//string inputValue = GetValueFromUser(consoleRead);
+//ConvertValues(inputValue, consoleWrite);
+//VerifyValue(inputValue, consoleWrite);
+StringModifyDemo(consoleWrite);
 
 static (IWriteData, IReadData) Init()
 {
@@ -77,4 +80,29 @@ static void PrintResult<T>(IResult<T> result, string userInput, IWriteData write
             write.WriteLine($"{prefix}{error}{suffix}");
         }
     }
+}
+
+
+
+static void StringModifyDemo(IWriteData write)
+{
+    string[] names = { "Adam", "Bridgette", "Carla", "Daniel", "Ebenezer", "Francine", "George" };
+    decimal[] hours = { 40, 6.667m, 40.39m, 82, 40.333m, 80, 16.75m };
+
+    StringModifier stringModifier = new();
+
+    for (int i = 0; i < names.Length; i++)
+    {
+        string name = stringModifier.Padding(names[i], Alignment.LEFT, 15);
+        string hour = stringModifier.Padding(hours[i], Alignment.RIGHT, 5);
+        write.WriteLine(name + hour);
+    }
+
+
+    string myString = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ut " +
+        "volutpat enim. Cras sollicitudin quam et ligula aliquet, sed commodo felis dapibus.";
+    write.WriteLine("");
+    write.WriteLine(stringModifier.Padding("Truncate",Alignment.CENTER,20,'*'));
+    write.WriteLine(stringModifier.Truncate(myString, 11));
+
 }
